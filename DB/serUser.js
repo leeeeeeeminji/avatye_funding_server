@@ -11,7 +11,20 @@ function readUser() {
     return conpro(query);
 }
 
+// 회원가입
+function join(userInfor) {
+    const query = `insert into
+    user(userProfile, userNickName, userAddress, userDate, userComent, userWebsite, userEmail, userPassword, userPhone, userKakao, userFacebook, userNaver, userBasicAddress)
+values 
+("${userInfor.userProfile}","${userInfor.userNickName}","${userInfor.userAddress}","${userInfor.userDate}",
+"${userInfor.userComent}","${userInfor.userWebsite}","${userInfor.userEmail}","${userInfor.userPassword}",
+"${userInfor.userPhone}","${userInfor.userKakao}","${userInfor.userFacebook}","${userInfor.userNaver}",1) `
+
+    con(query);
+}
+
 
 module.exports = {
-    readUser
+    readUser,
+    join
 }
