@@ -1,22 +1,13 @@
 const mysql = require('mysql');
-const mysql1 = require('mysql2/promise');
 
 const dataCon = mysql.createConnection({
-    host: 'localhost',
+    host: 'avatumble.catfwgqmvd2y.ap-northeast-2.rds.amazonaws.com',
     user: 'root',
-    password: 'tiger',
+    password: 'avatyetiger',
     port: 3306,
-    database: 'm',
+    database: 'ava_tumblbug',
     multipleStatements:true
 });
-
-const pool = mysql1.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'tiger' ,
-    database: 'ava_shopping'
-})
-
 
 // DB 커넥션 후 Promise 반환
 function conpro(query) {
@@ -29,6 +20,7 @@ function conpro(query) {
             }
         })
     })
+
 }
 
 // DB 커넥션
@@ -42,7 +34,6 @@ function con(query){
 
 module.exports = {
     dataCon,
-    pool,
     conpro,
     con
 }
