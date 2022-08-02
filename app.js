@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
+
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
@@ -23,6 +25,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/product',productRouter);
+app.use(cors());
+
+let corsOptions = {
+  origin: 'https://www.localhost:8080',
+  credentials: true
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
