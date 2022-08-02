@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-const dataCon = mysql.createConnection({
+const dataCon = mysql.createPool({
     host: 'avatumble.catfwgqmvd2y.ap-northeast-2.rds.amazonaws.com',
     user: 'root',
     password: 'avatyetiger',
@@ -32,8 +32,35 @@ function con(query){
     })
 }
 
+// 트랜젝션
+function tran(query1,query2) {
+    dataCon.getConnection(function(err,conn){
+        if(!err){
+            conn.beginTransaction(function(err){
+                if(err){
+                    console.log("트랜젝션 에러");
+                }else{
+                    conn.query(query1 + query2,function(err,rows){
+                        if(!err){
+                            conn.commit();
+                        }else{
+                            console.log("쿼리 에러" + err);
+                            conn.rollback();
+                        }
+                    })
+                }
+            })
+        }else{
+            console.log("에러");
+        }
+        conn.release();
+    })
+    console.log("조인 성공");
+}
+
 module.exports = {
     dataCon,
     conpro,
-    con
+    con,
+    tran
 }
