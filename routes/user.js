@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const moment = require("moment");
 const db = require('./../DB/serUser');
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 const axios = require('axios');
 const qs = require('qs');
 const bcrypt = require('bcrypt');
-const saltRounds = 10; //남들이 비밀번호 모르게 하는 일종의 노이즈 / 이 숫자가 많아질수록 시간이 오래걸림
+// 검증을 위한 코드를 제외하고 생략
+const { body,validationResult } = require('express-validator');
 
 /* 유저 조회 */
 router.get('/', wrapper(async function (req, res, next) {
@@ -16,12 +16,25 @@ router.get('/', wrapper(async function (req, res, next) {
 }));
 
 // 이메일 회원 가입
-router.post('/join', wrapper(async function (req, res) {
+// 비밀번호 6-20 / 이메일 = 그냥 형식에만 맞게 / 닉네임 2글자 이상 20자 이하
+router.post('/join',
+[
+  body('userEmail').isEmail(),
+  body('userPassword').isLength({min: 6,max: 20}),
+  body('userNickName').isLength({min: 2,max: 20})
+],
+wrapper(async function (req, res) {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors:errors.array()});
+  }
+
   const rb = req.body;
 
   // 비밀번호 암호화 하기
   const password = await passBcrypt(rb.userPassword);
 
+  // DB로 넘겨줄 값 정리
   let userInfor = {
     profile: rb.userProfile,
     nickName: rb.userNickName,
@@ -38,28 +51,20 @@ router.post('/join', wrapper(async function (req, res) {
           if(err){
             rej("err");
           }else{
-            console.log(hash);
-            res(hash)
+            res(hash);
           }
         })
       })
     }
 
-
-  // 유효성 검사 /비밀번호 6-20 / 이메일 = 그냥 형식에만 맞게 / 아이디 2글자 이상 20자 이하
-
-
   // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
   const f = await db.duplicateCheck(userInfor.loginMethod,userInfor.email);
-  console.log(f.length);
   if(f.length === 0){
     db.joinEmail(userInfor);
     res.send("Join OK");
   }else{
     res.send("중복 아이디");
   }
-
-
 
 }));
 
