@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const moment = require("moment");
 const db = require('./../DB/serUser');
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 const axios = require('axios');
 const qs = require('qs');
+const bcrypt = require('bcrypt');
+// 검증을 위한 코드를 제외하고 생략
+const { body,validationResult } = require('express-validator');
 
 /* 유저 조회 */
 router.get('/', wrapper(async function (req, res, next) {
@@ -14,22 +16,57 @@ router.get('/', wrapper(async function (req, res, next) {
 }));
 
 // 이메일 회원 가입
-router.post('/join', function (req, res) {
+// 비밀번호 6-20 / 이메일 = 그냥 형식에만 맞게 / 닉네임 2글자 이상 20자 이하
+router.post('/join',
+[
+  body('userEmail').isEmail(),
+  body('userPassword').isLength({min: 6,max: 20}),
+  body('userNickName').isLength({min: 2,max: 20})
+],
+wrapper(async function (req, res) {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors:errors.array()});
+  }
+
   const rb = req.body;
 
-  const userInfor = {
+  // 비밀번호 암호화 하기
+  const password = await passBcrypt(rb.userPassword);
+
+  // DB로 넘겨줄 값 정리
+  let userInfor = {
     profile: rb.userProfile,
     nickName: rb.userNickName,
     email: rb.userEmail,
-    password: rb.userPassword,
+    password: password,
     loginMethod: "EMAIL",
     userDiv: new Date().getTime().toString(36)
   }
 
-  db.joinEmail(userInfor);
-  res.send("Join OK");
+  // 비밀번호 암호화 
+  function passBcrypt(userPassword) {
+    return new Promise((res,rej) => {
+        bcrypt.hash(userPassword, 10, (err,hash) => {
+          if(err){
+            rej("err");
+          }else{
+            res(hash);
+          }
+        })
+      })
+    }
 
-})
+  // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
+  const f = await db.duplicateCheck(userInfor.loginMethod,userInfor.email);
+  if(f.length === 0){
+    db.joinEmail(userInfor);
+    res.send("Join OK");
+  }else{
+    res.send("중복 아이디");
+  }
+
+}));
 
 // 카카오 로그인 관련 계정
 const kakao = {
@@ -98,7 +135,7 @@ router.get('/kakao/callback', async (req, res) => {
   }
 
   // 해당 계정이 DB에 등록되어있는지 / 없으면 회원가입 / 있으면 로그인
-  const f = await db.kakao(userData.loginMethod, userData.loginID);
+  const f = await db.duplicateCheck(userData.loginMethod, userData.loginID);
 
   if (f[0] === undefined) {
     console.log("언디파인 회원가입 시작");
