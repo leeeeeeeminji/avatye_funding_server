@@ -15,6 +15,32 @@ router.get('/', wrapper(async function (req, res, next) {
   res.send(f);
 }));
 
+// 이메일 로그인
+router.post('/login',[],wrapper (async(req,res) => {
+  const rb = req.body;
+  // 유저가 입력한 이메일 패스워드
+  const userEmail = rb.userEmail;
+  const userPassword = rb.userPassword;
+  // DB에서 해당 아이디에 매칭되어있는 해쉬된 비밀번호 가져오기
+  const password = await db.loginEmail(userEmail);
+  let dbPassword = "";
+  // 만약 매칭되는 비밀번호가 없다면 ( 아이디가 없다면 ) res로 에러 출력
+  if(password.length === 0){
+    res.send(false);
+  }else{
+    // 매칭되는 비밀번호가 있다면 dbPassword에 값 넣어줌
+    dbPassword = password[0].userPassword;
+    // 유저 입력 비밀번호, 가져온 비밀번호 비교 후 같으면 true 반환
+  let loginCheck = await bcrypt.compare(userPassword,dbPassword);
+
+  res.send(loginCheck);
+  }
+
+
+
+
+}))
+
 // 이메일 회원 가입
 // 비밀번호 6-20 / 이메일 = 그냥 형식에만 맞게 / 닉네임 2글자 이상 20자 이하
 router.post('/join',
@@ -32,7 +58,8 @@ wrapper(async function (req, res) {
   const rb = req.body;
 
   // 비밀번호 암호화 하기
-  const password = await passBcrypt(rb.userPassword);
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(rb.userPassword, salt);
 
   // DB로 넘겨줄 값 정리
   let userInfor = {
@@ -43,19 +70,6 @@ wrapper(async function (req, res) {
     loginMethod: "EMAIL",
     userDiv: new Date().getTime().toString(36)
   }
-
-  // 비밀번호 암호화 
-  function passBcrypt(userPassword) {
-    return new Promise((res,rej) => {
-        bcrypt.hash(userPassword, 10, (err,hash) => {
-          if(err){
-            rej("err");
-          }else{
-            res(hash);
-          }
-        })
-      })
-    }
 
   // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
   const f = await db.duplicateCheck(userInfor.loginMethod,userInfor.email);
