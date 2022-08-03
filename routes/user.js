@@ -6,6 +6,8 @@ const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 const axios = require('axios');
 const qs = require('qs');
+const bcrypt = require('bcrypt');
+const saltRounds = 10; //남들이 비밀번호 모르게 하는 일종의 노이즈 / 이 숫자가 많아질수록 시간이 오래걸림
 
 /* 유저 조회 */
 router.get('/', wrapper(async function (req, res, next) {
@@ -14,22 +16,52 @@ router.get('/', wrapper(async function (req, res, next) {
 }));
 
 // 이메일 회원 가입
-router.post('/join', function (req, res) {
+router.post('/join', wrapper(async function (req, res) {
   const rb = req.body;
 
-  const userInfor = {
+  // 비밀번호 암호화 하기
+  const password = await passBcrypt(rb.userPassword);
+
+  let userInfor = {
     profile: rb.userProfile,
     nickName: rb.userNickName,
     email: rb.userEmail,
-    password: rb.userPassword,
+    password: password,
     loginMethod: "EMAIL",
     userDiv: new Date().getTime().toString(36)
   }
 
-  db.joinEmail(userInfor);
-  res.send("Join OK");
+  // 비밀번호 암호화 
+  function passBcrypt(userPassword) {
+    return new Promise((res,rej) => {
+        bcrypt.hash(userPassword, 10, (err,hash) => {
+          if(err){
+            rej("err");
+          }else{
+            console.log(hash);
+            res(hash)
+          }
+        })
+      })
+    }
 
-})
+
+  // 유효성 검사 /비밀번호 6-20 / 이메일 = 그냥 형식에만 맞게 / 아이디 2글자 이상 20자 이하
+
+
+  // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
+  const f = await db.duplicateCheck(userInfor.loginMethod,userInfor.email);
+  console.log(f.length);
+  if(f.length === 0){
+    db.joinEmail(userInfor);
+    res.send("Join OK");
+  }else{
+    res.send("중복 아이디");
+  }
+
+
+
+}));
 
 // 카카오 로그인 관련 계정
 const kakao = {
@@ -98,7 +130,7 @@ router.get('/kakao/callback', async (req, res) => {
   }
 
   // 해당 계정이 DB에 등록되어있는지 / 없으면 회원가입 / 있으면 로그인
-  const f = await db.kakao(userData.loginMethod, userData.loginID);
+  const f = await db.duplicateCheck(userData.loginMethod, userData.loginID);
 
   if (f[0] === undefined) {
     console.log("언디파인 회원가입 시작");

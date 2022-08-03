@@ -37,8 +37,8 @@ function joinEmail(ud) {
     tran(query,query2);
 }
 
-// 카카오 API 받아오는 부분
-function kakao(method,id){
+// 메소드 별 아이디가 있는지 없는지 여부 파악하는 곳
+function duplicateCheck(method,id){
     const query = `select * from loginPath where loginMethod = "${method}" and loginID = "${id}";`
     return conpro(query);
 };
@@ -47,5 +47,5 @@ module.exports = {
     readUser,
     joinkakao,
     joinEmail,
-    kakao
+    duplicateCheck
 }
