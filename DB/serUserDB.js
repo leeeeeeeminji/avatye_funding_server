@@ -2,6 +2,9 @@ const { query } = require('express');
 const cons = require('./DatabaseConn');
 const db = cons.dataCon;
 const moment = require("moment");
+
+const wrap = require('../routes/wrapper');
+const wrapper = wrap.wrapper;
 // conpro > DB 읽어올때 쓰는 모듈 ( 프로미스 반환 / async await 사용하기 위해 사용 )
 // con > row에 대해 읽어올 필요가 없는 쿼리 날릴때 사용
 const conpro = cons.conpro;
@@ -11,6 +14,13 @@ const tran = cons.tran;
 // 유저 전체 읽기
 function readUser() {
     const query = `select * from user`
+
+    return conpro(query);
+}
+
+// 토큰 발급에 필요한 유저 판별값 가져오기
+function readUserDIV(loginMethod,loginID) {
+    const query = `select userID from loginPath where loginMethod = "${loginMethod}" and loginID = "${loginID}";`
 
     return conpro(query);
 }
@@ -55,5 +65,6 @@ module.exports = {
     joinkakao,
     joinEmail,
     duplicateCheck,
-    loginEmail
+    loginEmail,
+    readUserDIV
 }
