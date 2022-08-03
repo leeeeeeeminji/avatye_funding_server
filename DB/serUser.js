@@ -37,6 +37,13 @@ function joinEmail(ud) {
     tran(query,query2);
 }
 
+// 이메일 로그인
+function loginEmail(email) {
+    const query = `select userPassword from user where userEmail = "${email}"`
+
+    return conpro(query);
+}
+
 // 메소드 별 아이디가 있는지 없는지 여부 파악하는 곳
 function duplicateCheck(method,id){
     const query = `select * from loginPath where loginMethod = "${method}" and loginID = "${id}";`
@@ -47,5 +54,6 @@ module.exports = {
     readUser,
     joinkakao,
     joinEmail,
-    duplicateCheck
+    duplicateCheck,
+    loginEmail
 }
