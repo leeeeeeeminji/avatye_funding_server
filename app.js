@@ -8,6 +8,9 @@ const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
+var projectRouter = require('./routes/project');
+//이미지 저장
+var imgRouter = require('./routes/img');
 
 var app = express();
 
@@ -20,15 +23,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/user', userRouter);
 app.use(cors());
 
 let corsOptions = {
   origin: 'https://www.localhost:8080',
   credentials: true
 }
+
+
+app.use('/', indexRouter);
+app.use('/user', userRouter);
+app.use('/project',projectRouter);
+//이미지
+app.use('/img', imgRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
