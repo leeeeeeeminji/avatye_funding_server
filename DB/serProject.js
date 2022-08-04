@@ -20,15 +20,26 @@ function findProject(req) {
 }
 
 // 프로젝트 등록하기
-function createProject(req) {
+function createProject(req) {   
     const {cateIndex, userIndex, proTitle, proSummary, proProfile, proGoal, proBeginDate, proEndDate, proContents}= req.body;
 
     const query = `insert into project (cateIndex, userIndex, proTitle, proSummary, proProfile, proGoal, proBeginDate, proEndDate, proContents) values (${cateIndex}, ${userIndex}, '${proTitle}', '${proSummary}', '${proProfile}', ${proGoal}, '${proBeginDate}', '${proEndDate}', '${proContents}')`
     return con(query);
 }
 
+// 카테고리에 해당하는 프로젝트 불러오기
+function readProjectByCate(req) {
+    const category = req.params.category;
+
+    //const query = `select * from project p join category c on p.cateIndex = c.cateIndex where cateName = ${category}`
+    const query = `select proIndex, p.cateIndex, c.cateName, proLongTitle, proSummary, proProfile, proEndDate, proNowAmount from project p join category c on p.cateIndex = c.cateIndex where cateName = '${category}'`
+
+    return conpro(query);
+}
+
 module.exports = {
     readProject,
     createProject,
-    findProject
+    findProject,
+    readProjectByCate
 }
