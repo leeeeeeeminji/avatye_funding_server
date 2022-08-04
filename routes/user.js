@@ -96,7 +96,7 @@ router.post('/join',
       email: rb.userEmail,
       password: password,
       loginMethod: "EMAIL",
-      userDiv: new Date().getTime().toString(36)
+      userDiv: (new Date().getTime()*Math.floor( ( Math.random() * 9999 ) )).toString(36)
     }
 
     // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
@@ -110,69 +110,18 @@ router.post('/join',
 
   }));
 
-// 카카오 로그인 관련 계정
-const kakao = {
-  clientID: '630231afd01507218d07fba06f16720d',
-  clientSecret: 'LRpqtId10A8c7UkqYfEuh51fKLyWSiQv',
-  redirectUri: 'http://localhost:3000/user/kakao/callback'
-}
-
-// 카카오 로그인 진입 / 있다면 로그인 없다면 회원가입
-router.get('/kakao', (req, res) => {
-  const kakaoAuthURL =
-    `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,profile_image,account_email,birthday,`;
-  res.redirect(kakaoAuthURL);
-})
-
-// 로그인 후 콜백 받아 정보 전달
-router.get('/kakao/callback', async (req, res) => {
-  let token;
-  try {
-    token = await axios({
-      method: 'POST',
-      url: 'https://kauth.kakao.com/oauth/token',
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      data: qs.stringify({
-        grant_type: 'authorization_code',
-        // 특정 string 넣기 
-        client_id: kakao.clientID,
-        client_secret: kakao.clientSecret,
-        redirectUri: kakao.redirectUri,
-        code: req.query.code,
-      })
-      //객체를 string으로 변환 
-    })
-  } catch (err) {
-    res.json(err.data)
-  }
-
-
-  //kakao에게 요청
-  let user;
-  try {
-    user = await axios({
-      method: "GET",
-      url: 'https://kapi.kakao.com/v2/user/me',
-      headers: {
-        Authorization: `Bearer ${token.data.access_token}`
-      }
-    })
-  } catch (err) {
-    res.json(err.data)
-  }
-  //  가져온 정보 읽어오는 부분
-  console.log(user);
-
+// 카카오 로그인 콜백 받기
+router.post('/kakao', async (req, res) => {
+  const rb = req.body;
+  console.log(rb);
   // 가져온 정보 중 필요한 정보 추출
   const userData = {
-    loginID: user.data.id,
-    nickName: user.data.properties.nickname,
-    email: user.data.kakao_account.email,
+    loginID: rb.loginID,
+    nickName: rb.nickName,
+    email: rb.email,
     loginMethod: "KAKAO",
-    userProfile: user.data.properties.profile_image,
-    userDiv: new Date().getTime().toString(36)
+    userProfile: rb.userProfile,
+    userDiv: (new Date().getTime()*Math.floor( ( Math.random() * 9999 ) )).toString(36)
   }
 
   // 해당 계정이 DB에 등록되어있는지 / 없으면 회원가입 / 있으면 로그인
@@ -182,7 +131,11 @@ router.get('/kakao/callback', async (req, res) => {
     console.log("언디파인 회원가입 시작");
     // kakao 아이디 새로 만들기
     db.joinkakao(userData);
-    res.send('회원가입');
+    const token = await middle.newToken(userData.loginMethod, userData.loginID);
+    res.send({
+      login: true,
+      token: token
+    });
   } else {
     const token = await middle.newToken(userData.loginMethod, userData.loginID);
     res.send({
@@ -190,8 +143,7 @@ router.get('/kakao/callback', async (req, res) => {
       token: token
     });
   };
-
-  // res.send('success');
+  
 });
 
 
