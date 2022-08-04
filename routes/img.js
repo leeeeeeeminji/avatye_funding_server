@@ -3,10 +3,13 @@ var router = express.Router();
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 const multer = require('multer')
+const multerS3 = require('multer-s3')
+const aws = require('aws-sdk')
 const path = require('path');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const app = express();
+aws.config.loadFromPath("/Users/leeminji/Downloads/avatye_funding_server/avatye_funding_server/s3.json");
 
 let corsOption = {
     origin : "*",
@@ -15,28 +18,26 @@ let corsOption = {
 
 app.use(cors(corsOption))
 
-const storage = multer.diskStorage({
-    destination : function(req, file, cb) {
-        cb("../")
-    },
-    filename : function(req, file, cb) {
-        const ext = path.extname(file.originalname);
-        cb(null, path.basename(file.originalname, ext) + "_" + Date.now() + ext);
-    },
+const s3 = new aws.S3();
+const upload = multer({
+    storage : multerS3({
+        s3 : s3,
+        bucket : "avaimage",
+        acl : "public-read",
+        contentType : multerS3.AUTO_CONTENT_TYPE,
+        key : function(req, file, cb) {
+            cb(null, `${Date.now()}_${file.originalname}`);
+        },
+    }),
 });
 
-const upload = multer({
-    storage : storage
-})
-
 router.post('/', upload.single('img'), async(req, res)=> {
-    const image= req.file.path;
-    console.log(req.file);
+    const image= req.file.location
+
     if(image === undefined){
         return res.send("이미지없음");
     }
-    res.send("성공! ><");
+    res.send(image);
 })
-
 
 module.exports = router;
