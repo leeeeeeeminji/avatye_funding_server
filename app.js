@@ -3,10 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
+
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
-var productRouter = require('./routes/product');
+var projectRouter = require('./routes/project');
+//이미지 저장
+var imgRouter = require('./routes/img');
 
 var app = express();
 
@@ -19,10 +23,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+
+let corsOptions = {
+  origin: 'https://www.localhost:8080',
+  credentials: true
+}
+
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
-app.use('/product',productRouter);
+app.use('/project',projectRouter);
+//이미지
+app.use('/img', imgRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
