@@ -9,9 +9,18 @@ const qs = require('qs');
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
-/* 유저 조회 */
+/* 유저 조회 */ // 토큰 가져온거 테스트 중
 router.get('/', wrapper(async function (req, res, next) {
   const f = await db.readUser();
+  const toke = req.get('user_token');
+  // console.log(toke);
+  const msg = await middle.verifyToken(toke);
+  // console.log(msg);
+  if(msg.code){
+    console.log(msg.code + " : " + msg.massage)
+  }else{
+    console.log(msg.userDIV)
+  }
   res.send(f);
 }));
 
@@ -110,7 +119,7 @@ router.post('/join',
 
   }));
 
-// 카카오 로그인 콜백 받기
+// 카카오 로그인
 router.post('/kakao', async (req, res) => {
   const rb = req.body;
   console.log(rb);
