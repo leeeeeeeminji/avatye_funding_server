@@ -9,7 +9,7 @@ const path = require('path');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const app = express();
-aws.config.loadFromPath("/Users/leeminji/Downloads/avatye_funding_server/avatye_funding_server/s3.json");
+aws.config.loadFromPath("/Users/newt/avatye_funding_server/s3.json");
 
 let corsOption = {
     origin : "*",
