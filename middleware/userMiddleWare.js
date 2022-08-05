@@ -13,7 +13,7 @@ async function newToken(loginMethod,loginID){
         type: 'JWT',
         userDIV: tokenDiv
     }, secret, {
-        expiresIn: '1m', // 만료시간 15분
+        expiresIn: '15m', // 만료시간 15분
         issuer: tokenDiv
     });
 
@@ -26,7 +26,7 @@ async function verifyToken(token){
         decodeToken = jwt.verify(token,secret);
         return decodeToken;
     }catch(err){
-        if(err.name === 'TokenExpireError'){
+        if(err.name === 'TokenExpiredError'){
             return {
                 code:419,
                 massage: '토큰이 만료되었습니다.'
