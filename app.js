@@ -9,6 +9,7 @@ const cors = require('cors');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var projectRouter = require('./routes/project');
+var mypageRouter = require('./routes/myPage');
 //이미지 저장
 var imgRouter = require('./routes/img');
 
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 let corsOptions = {
-  origin: 'https://www.localhost:8080',
+  origin: 'https://tumblbug.avatye.com:8080',
   credentials: true
 }
 
@@ -34,6 +35,7 @@ let corsOptions = {
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/project',projectRouter);
+app.use('/mypage', mypageRouter);
 //이미지
 app.use('/img', imgRouter);
 

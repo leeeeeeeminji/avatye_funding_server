@@ -55,7 +55,7 @@ function tran(query1,query2) {
         }
         conn.release();
     })
-    console.log("조인 성공");
+    console.log("성공");
 }
 
 module.exports = {
