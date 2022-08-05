@@ -4,10 +4,6 @@ const db = require('../DB/serMypageDB');
 const middle = require('../middleware/userMiddleWare');
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
-const axios = require('axios');
-const qs = require('qs');
-const bcrypt = require('bcrypt');
-const { body, validationResult } = require('express-validator');
 
 /* mypage 조회 comment 반환 */
 router.get('/', wrapper(async function (req, res) {

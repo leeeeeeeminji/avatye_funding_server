@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const db = require('../DB/serUserDB');
 const middle = require('../middleware/userMiddleWare');
+const util = require('../util/userUtil');
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 const axios = require('axios');
@@ -11,27 +12,6 @@ const { body, validationResult } = require('express-validator');
 
 /* 유저 조회 */ // 토큰 가져온거 테스트 중
 router.get('/', wrapper(async function (req, res, next) {
-  const f = await db.readUser();
-  const toke = req.get('user_token');
-  // console.log(toke);
-  const msg = await middle.verifyToken(toke);
-  // console.log(msg);
-  if (msg.code) {
-    console.log(msg.code + " : " + msg.massage);
-    return res.send(msg.code + " : " + msg.massage);
-  } else {
-    // 토큰으로 뭔가를 실행할때 사용 EX) MyPage 등...
-    console.log(msg.userDIV);
-    return res.send(msg.userDIV);
-  }
-  res.send(f);
-}));
-
-// 토큰 검증 테스트 / 테스트 중
-router.get('/token', wrapper(async function (req, res, next) {
-  const f = await middle.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiSldUIiwidXNlckRJViI6Imw2ZGE0aHg0IiwiaWF0IjoxNjU5NTE0MDA5LCJleHAiOjE2NTk1MTQwNjksImlzcyI6Imw2ZGE0aHg0In0.0FJrWV28KYHfWtT7uLRzs92SjnR2PP0vUxLkiTZUyPE");
-  console.log(f);
-  res.send(f);
 }));
 
 // 이메일 로그인
@@ -62,7 +42,7 @@ router.post('/login', [
     // 유저 입력 비밀번호, 가져온 비밀번호 비교 후 같으면 true 반환
     let loginCheck = await bcrypt.compare(userPassword, dbPassword);
     if (loginCheck === true) {
-      const token = await middle.newToken("EMAIL", userEmail);
+      const token = await util.newToken("EMAIL", userEmail);
       res.send(
         {
           login: loginCheck,
@@ -123,7 +103,7 @@ router.post('/join',
   }));
 
 // 카카오 로그인
-router.post('/kakao', async (req, res) => {
+router.post('/kakao', wrapper(async (req, res) => {
   const rb = req.body;
   console.log(rb);
   // 가져온 정보 중 필요한 정보 추출
@@ -141,22 +121,29 @@ router.post('/kakao', async (req, res) => {
 
   if (f[0] === undefined) {
     console.log("언디파인 회원가입 시작");
+
     // kakao 아이디 새로 만들기
-    db.joinkakao(userData);
-    const token = await middle.newToken(userData.loginMethod, userData.loginID);
-    res.send({
-      login: true,
-      token: token
-    });
+    let f = await db.joinkakao(userData);
+
+    // kakao 아이디 만들다가 오류가 나면 회원가입 오류 반환 아니라면 로그인 토큰 생성
+    if(f === "ERR"){
+      res.send("회원가입 오류");
+    }else{
+      const token = await util.newToken(userData.loginMethod, userData.loginID);
+      res.send({
+        login: true,
+        token: token
+      });
+    }
   } else {
-    const token = await middle.newToken(userData.loginMethod, userData.loginID);
+    const token = await util.newToken(userData.loginMethod, userData.loginID);
     res.send({
       login: true,
       token: token
     });
   };
 
-});
+}));
 
 
 module.exports = router;
