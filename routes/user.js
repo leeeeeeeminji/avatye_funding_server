@@ -103,7 +103,7 @@ router.post('/join',
   }));
 
 // 카카오 로그인
-router.post('/kakao', async (req, res) => {
+router.post('/kakao', wrapper(async (req, res) => {
   const rb = req.body;
   console.log(rb);
   // 가져온 정보 중 필요한 정보 추출
@@ -121,13 +121,20 @@ router.post('/kakao', async (req, res) => {
 
   if (f[0] === undefined) {
     console.log("언디파인 회원가입 시작");
+
     // kakao 아이디 새로 만들기
-    db.joinkakao(userData);
-    const token = await util.newToken(userData.loginMethod, userData.loginID);
-    res.send({
-      login: true,
-      token: token
-    });
+    let f = await db.joinkakao(userData);
+
+    // kakao 아이디 만들다가 오류가 나면 회원가입 오류 반환 아니라면 로그인 토큰 생성
+    if(f === "ERR"){
+      res.send("회원가입 오류");
+    }else{
+      const token = await util.newToken(userData.loginMethod, userData.loginID);
+      res.send({
+        login: true,
+        token: token
+      });
+    }
   } else {
     const token = await util.newToken(userData.loginMethod, userData.loginID);
     res.send({
@@ -136,7 +143,7 @@ router.post('/kakao', async (req, res) => {
     });
   };
 
-});
+}));
 
 
 module.exports = router;

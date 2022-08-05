@@ -12,33 +12,37 @@ const con = cons.con;
 const tran = cons.tran;
 
 function myPageComment(userDIV){
-    const query = `select userComent from user where userDIV = "${userDIV}"`
+    const query = `select Comment from userProfile where userID ="${userDIV}";`
     return conpro(query);
 }
 
-function myUploadProject(userDIV){
-    const query = `
-    select  proIndex,proProfile,cateName,userNickName,proLongTitle,proSummary,proGoal,proNowAmount,proEndDate
-    from project
-        join category
-        on project.cateIndex = category.cateIndex
-        join user
-        on user.userDIV = project.userDIV
-    where user.userDIV = "${userDIV}"`
+function myUploadProject(userID){
+    const query = 
+    `
+    select  projectIndex,proProfile,c.name,uP.nickName,p.LongTitle,proSummary,proGoal,proNowAmount,proEndDate
+    from project p
+        join category c
+        on p.cateIndex = c.cateIndex
+        join user u
+        on u.userID = p.userID
+        join userProfile uP
+        on u.userID = uP.userID
+    where u.userID = "${userID}";
+    `
     return conpro(query);
 }
 
 function myBuyProject(userDIV){
     const query = `
-    select  project.proIndex,proProfile,cateName,userNickName,proLongTitle,proSummary,proGoal,proNowAmount,proEndDate
-from project
-    join category
-    on project.cateIndex = category.cateIndex
-    join user
-    on user.userDIV = project.userDIV
-    join \`order\` o
-    on project.proIndex = o.proIndex
-where o.buyUser = "143my9evd3o"`
+    select  projectIndex,proProfile,c.name,uP.nickName,p.LongTitle,proSummary,proGoal,proNowAmount,proEndDate
+    from project p
+        join category c
+        on p.cateIndex = c.cateIndex
+        join user u
+        on u.userID = p.userID
+        join userProfile uP
+        on u.userID = uP.userID
+    where p.userID = "${userDIV}";`
     return conpro(query);
 }
 

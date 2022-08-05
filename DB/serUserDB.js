@@ -21,7 +21,6 @@ function readUser() {
 // 토큰 발급에 필요한 유저 판별값 가져오기
 function readUserDIV(loginMethod,loginID) {
     const query = `select userID from loginPath where loginMethod = "${loginMethod}" and loginID = "${loginID}";`
-
     return conpro(query);
 }
 
@@ -30,10 +29,12 @@ function joinkakao(ud) {
     const today = moment();
     const userDate = today.format("YYYY-MM-DD")
     //login path에 추가 
+    console.log(ud);
     //user DB에 추가
     const query = `insert into loginPath values("${ud.loginMethod}","${ud.loginID}","${ud.userDiv}");`
-    const query2 = `insert into user(userNickName,userDate,userEmail,userDIV,userProfile) values("${ud.nickName}","${userDate}","${ud.email}","${ud.userDiv}","${ud.userProfile}")`
-    tran(query,query2);
+    const query2 = `insert into user(userID,Date,Email) values("${ud.userDiv}","${userDate}","${ud.email}");`
+    const query3 = `insert into userProfile(userID,nickName,profileImage) values("${ud.userDiv}","${ud.nickName}","${ud.userProfile}");`
+    tran(query,query2,query3);
 }
 
 // 이메일 회원가입
