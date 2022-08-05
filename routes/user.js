@@ -16,15 +16,18 @@ router.get('/', wrapper(async function (req, res, next) {
   // console.log(toke);
   const msg = await middle.verifyToken(toke);
   // console.log(msg);
-  if(msg.code){
-    console.log(msg.code + " : " + msg.massage)
-  }else{
-    console.log(msg.userDIV)
+  if (msg.code) {
+    console.log(msg.code + " : " + msg.massage);
+    return res.send(msg.code + " : " + msg.massage);
+  } else {
+    // 토큰으로 뭔가를 실행할때 사용 EX) MyPage 등...
+    console.log(msg.userDIV);
+    return res.send(msg.userDIV);
   }
   res.send(f);
 }));
 
-// 토큰 검증 테스트 / 추후 
+// 토큰 검증 테스트 / 테스트 중
 router.get('/token', wrapper(async function (req, res, next) {
   const f = await middle.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiSldUIiwidXNlckRJViI6Imw2ZGE0aHg0IiwiaWF0IjoxNjU5NTE0MDA5LCJleHAiOjE2NTk1MTQwNjksImlzcyI6Imw2ZGE0aHg0In0.0FJrWV28KYHfWtT7uLRzs92SjnR2PP0vUxLkiTZUyPE");
   console.log(f);
@@ -105,7 +108,7 @@ router.post('/join',
       email: rb.userEmail,
       password: password,
       loginMethod: "EMAIL",
-      userDiv: (new Date().getTime()*Math.floor( ( Math.random() * 9999 ) )).toString(36)
+      userDiv: (new Date().getTime() * Math.floor((Math.random() * 9999))).toString(36)
     }
 
     // 아이디 중복 체크 ( 중복이 아니라면 회원 가입 완료 / 중복이라면 중복이라는 res 출력 )
@@ -130,7 +133,7 @@ router.post('/kakao', async (req, res) => {
     email: rb.email,
     loginMethod: "KAKAO",
     userProfile: rb.userProfile,
-    userDiv: (new Date().getTime()*Math.floor( ( Math.random() * 9999 ) )).toString(36)
+    userDiv: (new Date().getTime() * Math.floor((Math.random() * 9999))).toString(36)
   }
 
   // 해당 계정이 DB에 등록되어있는지 / 없으면 회원가입 / 있으면 로그인
@@ -152,7 +155,7 @@ router.post('/kakao', async (req, res) => {
       token: token
     });
   };
-  
+
 });
 
 
