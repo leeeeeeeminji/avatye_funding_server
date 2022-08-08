@@ -16,6 +16,13 @@ function anotherPage(userDIV) {
     return conpro(query);
 }
 
+function anotherProfile(userDIV) {
+    const query = `select profileImage,nickName,Date from userProfile
+    join user u on userProfile.userID = u.userID
+    where u.userID = "${userDIV}";`
+    return conpro(query);
+}
+
 function anotherUploadProject(userDIV) {
     const query =
         `
@@ -54,5 +61,6 @@ function anotherBuyProject(userDIV) {
 module.exports = {
     anotherPage,
     anotherUploadProject,
-    anotherBuyProject
+    anotherBuyProject,
+    anotherProfile
 }
