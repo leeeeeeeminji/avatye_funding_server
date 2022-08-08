@@ -11,12 +11,12 @@ const conpro = cons.conpro;
 const con = cons.con;
 const tran = cons.tran;
 
-function myPageComment(userDIV) {
+function anotherPage(userDIV) {
     const query = `select Comment from userProfile where userID ="${userDIV}";`
     return conpro(query);
 }
 
-function myUploadProject(userID) {
+function anotherUploadProject(userDIV) {
     const query =
         `
     select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
@@ -27,12 +27,12 @@ function myUploadProject(userID) {
             on u.userID = p.userID
         join userProfile uP
             on u.userID = uP.userID
-    where u.userID = "${userID}";
+    where u.userID = "${userDIV}";
     `
     return conpro(query);
 }
 
-function myBuyProject(userDIV) {
+function anotherBuyProject(userDIV) {
     const query = `
     select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
     from \`order\` o
@@ -52,7 +52,7 @@ function myBuyProject(userDIV) {
 
 
 module.exports = {
-    myPageComment,
-    myUploadProject,
-    myBuyProject
+    anotherPage,
+    anotherUploadProject,
+    anotherBuyProject
 }
