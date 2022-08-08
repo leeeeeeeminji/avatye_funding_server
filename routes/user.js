@@ -39,11 +39,13 @@ router.post('/login', [
     // 유저 입력 비밀번호, 가져온 비밀번호 비교 후 같으면 true 반환
     let loginCheck = await bcrypt.compare(userPassword, dbPassword);
     if (loginCheck === true) {
+      const nick = await db.loginNickname("EMAIL", userEmail);
       const token = await util.newToken("EMAIL", userEmail);
       res.send(
         {
           login: loginCheck,
-          token: token
+          token: token,
+          nickName: nick[0].nickName
         }
       );
     } else {
@@ -124,18 +126,21 @@ router.post('/kakao', wrapper(async (req, res) => {
     }
     // 트랜젝션 결과가 OK라면 토큰 발급 후 반환
     if (f === "OK") {
-      console.log("엘스문 진입 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
+      const nick = await db.loginNickname(userData.loginMethod, userData.loginID);
       const token = await util.newToken(userData.loginMethod, userData.loginID);
       res.send({
         login: true,
-        token: token
+        token: token,
+        nickName: nick[0].nickName
       });
     }
   } else {
+    const nick = await db.loginNickname(userData.loginMethod, userData.loginID);
     const token = await util.newToken(userData.loginMethod, userData.loginID);
     res.send({
       login: true,
-      token: token
+      token: token,
+      nickName: nick[0].nickName
     });
   };
 

@@ -2,7 +2,6 @@ const { query } = require('express');
 const cons = require('./DatabaseConn');
 const db = cons.dataCon;
 const moment = require("moment");
-
 const wrap = require('../routes/wrapper');
 const wrapper = wrap.wrapper;
 // conpro > DB 읽어올때 쓰는 모듈 ( 프로미스 반환 / async await 사용하기 위해 사용 )
@@ -57,6 +56,17 @@ function loginEmail(email) {
     return conpro(query);
 }
 
+// 이메일 로그인 시 닉네임 읽어오기
+async function loginNickname(loginMethod,loginID) {
+    try{    
+        const f = await readUserDIV(loginMethod,loginID);
+        const query = `select nickName from userProfile where userID = "${f[0].userID}";`
+        return conpro(query);
+    }catch(err){
+        console.log(err);
+    }
+}
+
 // 메소드 별 아이디가 있는지 없는지 여부 파악하는 곳
 function duplicateCheck(method,id){
     const query = `select * from loginPath where loginMethod = "${method}" and loginID = "${id}";`
@@ -69,5 +79,6 @@ module.exports = {
     joinEmail,
     duplicateCheck,
     loginEmail,
-    readUserDIV
+    readUserDIV,
+    loginNickname
 }
