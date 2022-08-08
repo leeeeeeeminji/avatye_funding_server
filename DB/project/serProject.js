@@ -3,6 +3,7 @@ const cons = require('../DatabaseConn');
 // tto > row에 대해 읽어올 필요가 없는 쿼리 날릴때 사용
 const conpro = cons.conpro;
 const con = cons.con;
+const trans = cons.tran;
 
 // 전체 프로젝트 불러오기
 function readProject() {
@@ -21,10 +22,12 @@ function findProject(req) {
 
 // 프로젝트 등록하기
 function createProject(req) {   
-    const {cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents}= req.body;
+    const {cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock}= req.body;
 
-    const query = `insert into project (cateIndex, userIndex, proTitle, proSummary, proProfile, proGoal, proBeginDate, proEndDate, proContents) values (${cateIndex}, ${userIndex}, '${proTitle}', '${proSummary}', '${proProfile}', ${proGoal}, '${proBeginDate}', '${proEndDate}', '${proContents}')`
-    return con(query);
+    const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
+    const insertQuery2 = `insert into projectGift (giftTitle, giftDetail, giftPrice, giftCount, giftStock) values ('${giftTitle}', '${giftDetail}', '${giftPrice}', '${giftCount}', '${giftStock}')`;
+
+    return trans(insertQuery1, insertQuery2);
 }
 
 // 카테고리에 해당하는 프로젝트 불러오기
