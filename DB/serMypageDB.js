@@ -16,6 +16,13 @@ function myPageComment(userDIV) {
     return conpro(query);
 }
 
+function myProfile(userDIV) {
+    const query = `select profileImage,nickName,Date from userProfile
+    join user u on userProfile.userID = u.userID
+    where u.userID = "${userDIV}";`
+    return conpro(query);
+}
+
 function myUploadProject(userID) {
     const query =
         `
@@ -54,5 +61,6 @@ function myBuyProject(userDIV) {
 module.exports = {
     myPageComment,
     myUploadProject,
-    myBuyProject
+    myBuyProject,
+    myProfile
 }
