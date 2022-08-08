@@ -35,9 +35,21 @@ function readProjectByCate(req) {
     return conpro(query);
 }
 
+// 메인 화면 주목할만한 프로젝트
+function mdProject(){
+    const query = `select projectIndex,longTitle,profileImage,goalprice,nowAmount,nickName,c.name from project
+    join userProfile uP on project.userID = uP.userID
+    join category c on project.cateIndex = c.cateIndex
+    order by goalprice desc
+    limit 8;`
+
+    return conpro(query);
+}
+
 module.exports = {
     readProject,
     createProject,
     findProject,
-    readProjectByCate
+    readProjectByCate,
+    mdProject
 } 
