@@ -59,12 +59,4 @@ router.get('/buy', wrapper(async function (req, res) {
     }
 }));
 
-// 토큰 검증 테스트 / 테스트 중
-router.get('/token', wrapper(async function (req, res, next) {
-    const f = await middle.verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiSldUIiwidXNlckRJViI6Imw2ZGE0aHg0IiwiaWF0IjoxNjU5NTE0MDA5LCJleHAiOjE2NTk1MTQwNjksImlzcyI6Imw2ZGE0aHg0In0.0FJrWV28KYHfWtT7uLRzs92SjnR2PP0vUxLkiTZUyPE");
-    console.log(f);
-    res.send(f);
-}));
-
-
 module.exports = router;

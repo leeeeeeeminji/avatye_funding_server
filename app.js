@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var projectRouter = require('./routes/project');
 var mypageRouter = require('./routes/myPage');
+var anotherProfileRouter = require('./routes/anotherUserProfile');
 //이미지 저장
 var imgRouter = require('./routes/img');
 
@@ -36,6 +37,7 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/project',projectRouter);
 app.use('/mypage', mypageRouter);
+app.use('/u', anotherProfileRouter);
 //이미지
 app.use('/img', imgRouter);
 
