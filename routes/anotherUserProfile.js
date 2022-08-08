@@ -5,7 +5,7 @@ const middle = require('../middleware/userMiddleWare');
 const wrap = require('./wrapper');
 const wrapper = wrap.wrapper;
 
-/* mypage 조회 comment 반환 */
+/* 다른 유저 ID 조회 comment 반환 */
 router.get('/:id', wrapper(async function (req, res) {
         userDIV = req.params.id;
         const userComment = await db.anotherPage(userDIV);
@@ -13,7 +13,15 @@ router.get('/:id', wrapper(async function (req, res) {
     }
 ));
 
-/* mypage 조회 올린 프로젝트 정보 반환 */
+/* 다른 유저 ID 조회 프로필 사진, 닉네임, 가입 날짜 반환 */
+router.get('/:id/profile', wrapper(async function (req, res) {
+    userDIV = req.params.id;
+    const userComment = await db.anotherProfile(userDIV);
+    return res.send(userComment[0]);
+}
+));
+
+/* 다른 유저 ID 조회 올린 프로젝트 정보 반환 */
 router.get('/:id/upload', wrapper(async function (req, res) {
         userDIV = req.params.id;
         const upLoadProject = await db.anotherUploadProject(userDIV);
@@ -21,7 +29,7 @@ router.get('/:id/upload', wrapper(async function (req, res) {
     }
 ));
 
-/* 다른 이용자 아이디로 조회 구매한 프로젝트 정보 반환 */
+/* 다른 유저 ID 조회 구매한 프로젝트 정보 반환 */
 router.get('/:id/buy', wrapper(async function (req, res) {
         userDIV = req.params.id;
         const buyProject = await db.anotherBuyProject(userDIV);
