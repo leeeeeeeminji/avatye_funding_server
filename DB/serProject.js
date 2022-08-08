@@ -21,7 +21,7 @@ function findProject(req) {
 
 // 프로젝트 등록하기
 function createProject(req) {   
-    const {cateIndex, userIndex, proTitle, proSummary, proProfile, proGoal, proBeginDate, proEndDate, proContents}= req.body;
+    const {cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents}= req.body;
 
     const query = `insert into project (cateIndex, userIndex, proTitle, proSummary, proProfile, proGoal, proBeginDate, proEndDate, proContents) values (${cateIndex}, ${userIndex}, '${proTitle}', '${proSummary}', '${proProfile}', ${proGoal}, '${proBeginDate}', '${proEndDate}', '${proContents}')`
     return con(query);
@@ -30,9 +30,7 @@ function createProject(req) {
 // 카테고리에 해당하는 프로젝트 불러오기
 function readProjectByCate(req) {
     const category = req.params.category;
-
-    //const query = `select * from project p join category c on p.cateIndex = c.cateIndex where cateName = ${category}`
-    const query = `select proIndex, p.cateIndex, c.cateName, proLongTitle, proSummary, proProfile, proEndDate, proNowAmount from project p join category c on p.cateIndex = c.cateIndex where cateName = '${category}'`
+    const query = `select projectIndex, p.cateIndex, c.name, uP.nickName, longTitle, summary, profileIMG, endDate, nowAmount, ((nowAmount / goalprice) * 100) as percent from project p join category c on p.cateIndex = c.cateIndex join userProfile uP on p.userID = uP.userID where c.name = ${category}`
 
     return conpro(query);
 }
@@ -42,4 +40,4 @@ module.exports = {
     createProject,
     findProject,
     readProjectByCate
-}
+} 
