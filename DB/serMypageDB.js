@@ -19,7 +19,7 @@ function myPageComment(userDIV){
 function myUploadProject(userID){
     const query = 
     `
-    select  projectIndex,proProfile,c.name,uP.nickName,p.LongTitle,proSummary,proGoal,proNowAmount,proEndDate
+    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
     from project p
         join category c
         on p.cateIndex = c.cateIndex
@@ -34,15 +34,17 @@ function myUploadProject(userID){
 
 function myBuyProject(userDIV){
     const query = `
-    select  projectIndex,proProfile,c.name,uP.nickName,p.LongTitle,proSummary,proGoal,proNowAmount,proEndDate
-    from project p
-        join category c
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    from \`order\` o
+            join project p
+        on o.projectIndex = p.projectIndex
+    join category c
         on p.cateIndex = c.cateIndex
         join user u
-        on u.userID = p.userID
-        join userProfile uP
+            on o.userID = u.userID
+    join userProfile uP
         on u.userID = uP.userID
-    where p.userID = "${userDIV}";`
+    where o.userID = "${userDIV}";`
     return conpro(query);
 }
 
