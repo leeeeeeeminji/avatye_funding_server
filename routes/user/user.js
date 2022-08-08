@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../DB/serUserDB');
-const util = require('../util/userUtil');
-const wrap = require('./wrapper');
+const db = require('../../DB/user/serUserDB');
+const util = require('../../util/userUtil');
+const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');

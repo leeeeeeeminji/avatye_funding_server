@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../DB/serProject');
-const wrap = require('./wrapper');
+const db = require('../../DB/project/serProject');
+const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
 
 // 전체 프로젝트 불러오기
