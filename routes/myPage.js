@@ -37,7 +37,7 @@ router.get('/upload', wrapper(async function (req, res) {
         // 유저 DIV 값으로 DB에서 정보 읽어오기
         console.log(msg.userDIV);
         const upLoadProject = await db.myUploadProject(msg.userDIV);
-        return res.send(upLoadProject[0]);
+        return res.send(upLoadProject);
     }
 }));
 
@@ -55,7 +55,7 @@ router.get('/buy', wrapper(async function (req, res) {
         // 유저 DIV 값으로 DB에서 정보 읽어오기
         console.log(msg.userDIV);
         const buyProject = await db.myBuyProject(msg.userDIV);
-        return res.send(buyProject[0]);
+        return res.send(buyProject);
     }
 }));
 

@@ -11,39 +11,39 @@ const conpro = cons.conpro;
 const con = cons.con;
 const tran = cons.tran;
 
-function myPageComment(userDIV){
+function myPageComment(userDIV) {
     const query = `select Comment from userProfile where userID ="${userDIV}";`
     return conpro(query);
 }
 
-function myUploadProject(userID){
-    const query = 
-    `
+function myUploadProject(userID) {
+    const query =
+        `
     select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
     from project p
         join category c
-        on p.cateIndex = c.cateIndex
+            on p.cateIndex = c.cateIndex
         join user u
-        on u.userID = p.userID
+            on u.userID = p.userID
         join userProfile uP
-        on u.userID = uP.userID
+            on u.userID = uP.userID
     where u.userID = "${userID}";
     `
     return conpro(query);
 }
 
-function myBuyProject(userDIV){
+function myBuyProject(userDIV) {
     const query = `
     select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
     from \`order\` o
-            join project p
-        on o.projectIndex = p.projectIndex
-    join category c
-        on p.cateIndex = c.cateIndex
+        join project p
+            on o.projectIndex = p.projectIndex
+        join category c
+            on p.cateIndex = c.cateIndex
         join user u
             on o.userID = u.userID
-    join userProfile uP
-        on u.userID = uP.userID
+        join userProfile uP
+            on u.userID = uP.userID
     where o.userID = "${userDIV}";`
     return conpro(query);
 }
