@@ -35,7 +35,7 @@ router.post('/login', [
     );
   } else {
     // 매칭되는 비밀번호가 있다면 dbPassword에 값 넣어줌
-    dbPassword = password[0].userPassword;
+    dbPassword = password[0].Password;
     // 유저 입력 비밀번호, 가져온 비밀번호 비교 후 같으면 true 반환
     let loginCheck = await bcrypt.compare(userPassword, dbPassword);
     if (loginCheck === true) {
