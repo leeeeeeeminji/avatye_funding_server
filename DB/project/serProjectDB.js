@@ -47,45 +47,9 @@ function readProjectByCate(req) {
     return conpro(query);
 }
 
-// 메인 화면 주목할만한 프로젝트
-function mdProject(){
-    const query = 
-    `select 
-    projectIndex,longTitle,profileImage,goalprice,nowAmount,nickName,c.name 
-    from project
-        join userProfile uP 
-            on project.userID = uP.userID
-        join category c 
-            on project.cateIndex = c.cateIndex
-    order by goalprice desc
-    limit 8;`
-
-    return conpro(query);
-}
-
-// 메인 화면 주목할만한 프로젝트
-function bestProject() {
-    const query = 
-    `select
-    (goalprice/nowAmount) as percent,projectIndex, longTitle,
-    profileIMG, goalprice,endDate,nickName,c.name
-    from project p
-        join category c
-            on p.cateIndex = c.cateIndex
-        join userProfile uP
-            on p.userID = uP.userID
-    where endDate > now()
-    order by percent desc
-        limit 10;`
-    return conpro(query);
-}
-
-
 module.exports = {
     readProject,
     createProject,
     findProject,
     readProjectByCate,
-    mdProject,
-    bestProject
 } 

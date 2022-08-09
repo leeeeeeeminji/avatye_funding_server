@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../../DB/project/serProject');
+const db = require('../../DB/project/serProjectDB');
 const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
 
@@ -17,14 +17,8 @@ router.post('/createProject', function(req, res) {
 
     let f = db.createProject(req);
     res.send(f);
-})
 
-// 프로젝트 상세 불러오기
-router.get('/projectDetail/:id', wrapper(async function(req, res) {
-
-    let f = await db.findProject(req);
-    res.send(f);
-}))
+});
 
 // 카테고리에 해당하는 프로젝트 불러오기
 router.get('/category/:category', wrapper(async function(req, res) {
@@ -33,21 +27,5 @@ router.get('/category/:category', wrapper(async function(req, res) {
     res.send(f);
 
 }))
-
-// 메인 화면 주목할만한 프로젝트
-router.get('/pointproject', wrapper(async function(req, res) {
-    
-    let f = await db.mdProject();
-    res.send(f);
-    
-}));
-
-// 메인 화면 인기 프로젝트
-router.get('/bestproject', wrapper(async function(req, res) {
-    
-    let f = await db.bestProject();
-    res.send(f);
-    
-}));
 
 module.exports = router;
