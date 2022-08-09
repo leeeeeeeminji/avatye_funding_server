@@ -42,4 +42,12 @@ router.get('/pointproject', wrapper(async function(req, res) {
     
 }));
 
+// 메인 화면 인기 프로젝트
+router.get('/bestproject', wrapper(async function(req, res) {
+    
+    let f = await db.bestProject();
+    res.send(f);
+    
+}));
+
 module.exports = router;

@@ -17,16 +17,19 @@ function anotherPage(userDIV) {
 }
 
 function anotherProfile(userDIV) {
-    const query = `select profileImage,nickName,Date from userProfile
-    join user u on userProfile.userID = u.userID
+    const query = 
+    `select profileImage,nickName,Date 
+    from userProfile
+        join user u 
+            on userProfile.userID = u.userID
     where u.userID = "${userDIV}";`
     return conpro(query);
 }
 
 function anotherUploadProject(userDIV) {
     const query =
-        `
-    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    `select 
+    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
     from project p
         join category c
             on p.cateIndex = c.cateIndex
