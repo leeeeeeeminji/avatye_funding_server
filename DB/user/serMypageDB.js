@@ -41,6 +41,12 @@ function myUploadProject(userID) {
     return conpro(query);
 }
 
+function myUploadCount(userID) {
+    const query =
+        `select count(*) as count from project where userID = '${userID}';`
+    return conpro(query);
+}
+
 function myBuyProject(userDIV) {
     const query = `
     select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
@@ -57,9 +63,17 @@ function myBuyProject(userDIV) {
     return conpro(query);
 }
 
+function myBuyCount(userID) {
+    const query =
+        `select count(*) as count from \`order\` where userID = '${userID}';`
+    return conpro(query);
+}
+
 module.exports = {
     myPageComment,
     myUploadProject,
     myBuyProject,
     myProfile,
+    myUploadCount,
+    myBuyCount
 }
