@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secret = 'hwan'
-const db = require('../DB/serUserDB');
+const db = require('../DB/user/serUserDB');
 
 
 // 토큰 발급

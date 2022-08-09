@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../DB/serAnotherUserProfile');
-const middle = require('../middleware/userMiddleWare');
-const wrap = require('./wrapper');
+const db = require('../../DB/user/serAnotherUserProfileDB');
+const middle = require('../../middleware/userMiddleWare');
+const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
 
 /* 다른 유저 ID 조회 comment 반환 */

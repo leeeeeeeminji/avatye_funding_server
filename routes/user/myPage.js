@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../DB/serMypageDB');
-const middle = require('../middleware/userMiddleWare');
-const wrap = require('./wrapper');
+const db = require('../../DB/user/serMypageDB');
+const middle = require('../../middleware/userMiddleWare');
+const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
 
 /* mypage 조회 comment 반환 */
