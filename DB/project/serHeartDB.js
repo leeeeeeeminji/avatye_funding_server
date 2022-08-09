@@ -13,7 +13,23 @@ function heart(userID,proIndex) {
     return conpro(query);
 }
 
+// 찜 목록
+function heartList(userID) {
+    const query = 
+    `select profileIMG,c.name,uP.nickName,longTitle,summary,goalprice,nowAmount,endDate from heart h
+        join project p
+            on h.projectIndex = p.projectIndex
+        join userProfile uP
+            on p.userID = uP.userID
+        join category c
+            on p.cateIndex = c.cateIndex
+    where h.userID = "${userID}";`
+
+    return conpro(query);
+}
+
 
 module.exports = {
-    heart
+    heart,
+    heartList
 } 
