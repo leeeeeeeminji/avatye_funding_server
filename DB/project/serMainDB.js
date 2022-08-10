@@ -7,18 +7,20 @@ const trans = cons.tran;
 
 // 메인 화면 주목할만한 프로젝트
 // 일단 목표 금액이 가장 높은 프로젝트 표시
-function mdProject() {
+function mdProject(userDIV) {
     const query =
-        `select 
-    projectIndex,LongTitle,profileIMG,goalPrice,nowPrice,nickName,c.name,uP.userID
-    from project
-        join userProfile uP 
-            on project.userID = uP.userID
-        join category c 
-            on project.cateIndex = c.cateIndex
-    where endDate > now()
-    order by goalprice desc
-    limit 8;`
+        `select
+        project.projectIndex,LongTitle,profileIMG,goalPrice,nowPrice,nickName,c.name,uP.userID,hc.heartCheck
+        from project
+            left join (select projectIndex,heartCheck from heart where userID = '${userDIV}') as hc
+                on hc.projectIndex = project.projectIndex
+            join userProfile uP
+                on project.userID = uP.userID
+            join category c
+                on project.cateIndex = c.cateIndex
+        where endDate > now()
+        order by goalprice desc
+        limit 8;`
 
     return conpro(query);
 }

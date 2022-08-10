@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const db = require('../../DB/user/serAnotherUserProfileDB');
+const anotherdb = require('../../DB/user/serMypageDB');
 const middle = require('../../middleware/userMiddleWare');
 const wrap = require('../../util/wrapper');
 const wrapper = wrap.wrapper;
@@ -35,6 +36,22 @@ router.get('/:id/buy', wrapper(async function (req, res) {
         const buyProject = await db.anotherBuyProject(userDIV);
         return res.send(buyProject);
     }
+));
+
+/* 다른 유저 ID 조회 올린 프로젝트 정보 반환 */
+router.get('/:id/uploadcount', wrapper(async function (req, res) {
+    userDIV = req.params.id;
+    const upLoadProjectCount = await anotherdb.myUploadCount(userDIV);
+    return res.send(upLoadProjectCount[0]);
+}
+));
+
+/* 다른 유저 ID 조회 구매한 프로젝트 정보 반환 */
+router.get('/:id/buycount', wrapper(async function (req, res) {
+    userDIV = req.params.id;
+    const buyProjectCount = await anotherdb.myBuyCount(userDIV);
+    return res.send(buyProjectCount[0]);
+}
 ));
 
 module.exports = router;
