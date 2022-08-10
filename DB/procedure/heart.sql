@@ -21,5 +21,3 @@ begin
         end if;
 end $$
 DELIMITER;
-
-call heart('2','1');

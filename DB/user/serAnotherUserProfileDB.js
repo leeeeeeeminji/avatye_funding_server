@@ -44,7 +44,7 @@ function anotherUploadProject(userDIV) {
 
 function anotherBuyProject(userDIV) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate,uP.userID
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate,uP.userID
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex
@@ -54,7 +54,9 @@ function anotherBuyProject(userDIV) {
             on o.userID = u.userID
         join userProfile uP
             on u.userID = uP.userID
-    where o.userID = "${userDIV}";`
+    where o.userID = "${userDIV}"
+    group by o.projectIndex
+    order by endDate desc;`
     return conpro(query);
 }
 
