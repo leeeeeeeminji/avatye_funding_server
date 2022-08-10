@@ -36,7 +36,7 @@ function bestProject() {
             on p.userID = uP.userID
     where endDate > now()
     order by percent desc
-        limit 10;`
+        limit 8;`
     return conpro(query);
 }
 
