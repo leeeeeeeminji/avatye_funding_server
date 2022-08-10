@@ -20,12 +20,13 @@ router.post('/createProject', function(req, res) {
 
 });
 
-// 카테고리에 해당하는 프로젝트 불러오기
-router.get('/category/:category', wrapper(async function(req, res) {
-    
-    let f = await db.readProjectByCate(req);
+// 인기 상품 불러오기
+router.get('/bestprojectlist',wrapper(async  function(req, res) {
+
+    let f = await db.bestProjectList(req);
     res.send(f);
 
-}))
+}));
+
 
 module.exports = router;

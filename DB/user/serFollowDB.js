@@ -6,13 +6,30 @@ const con = cons.con;
 const trans = cons.tran;
 
 // follow 추가 삭제
-function follow(userID,followedID) {
-    const query = 
-    `call follow("${userID}","${followedID}");`
+function follow(userID, followedID) {
+    const query =
+        `call follow('${userID}','${followedID}');`
+
+    return conpro(query);
+}
+
+// 팔로워 리스트
+function followerList(userID) {
+    const query = `select following from follow where followed = '${userID}' and followingCheck = 1;`
+
+    return conpro(query);
+}
+
+// 팔로우 한 리스트
+function followingList(userID) {
+    const query = `select following from follow where followed = '${userID}' and followingCheck = 1;`
 
     return conpro(query);
 }
 
 module.exports = {
     follow,
+    followerList,
+    followingList
+
 } 

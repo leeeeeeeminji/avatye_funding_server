@@ -17,8 +17,8 @@ function myPageComment(userDIV) {
 }
 
 function myProfile(userDIV) {
-    const query = 
-    `select profileImage,nickName,Date from userProfile
+    const query =
+        `select profileImage,nickName,Date from userProfile
         join user u 
             on userProfile.userID = u.userID
     where u.userID = "${userDIV}";`
@@ -28,7 +28,7 @@ function myProfile(userDIV) {
 function myUploadProject(userID) {
     const query =
         `
-    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate
     from project p
         join category c
             on p.cateIndex = c.cateIndex
@@ -49,7 +49,7 @@ function myUploadCount(userID) {
 
 function myBuyProject(userDIV) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex
@@ -58,14 +58,16 @@ function myBuyProject(userDIV) {
         join user u
             on o.userID = u.userID
         join userProfile uP
-            on u.userID = uP.userID
-    where o.userID = "${userDIV}";`
+            on p.userID = uP.userID
+    where o.userID = "${userDIV}"
+    group by o.projectIndex
+    order by endDate desc;`
     return conpro(query);
 }
 
 function myBuyCount(userID) {
     const query =
-        `select count(*) as count from \`order\` where userID = '${userID}';`
+        `Select count(*) as count from (select count(*) as count from \`order\` where userID = '${userID}' group by projectIndex) as total;`
     return conpro(query);
 }
 

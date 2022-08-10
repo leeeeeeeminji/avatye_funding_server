@@ -17,8 +17,8 @@ function anotherPage(userDIV) {
 }
 
 function anotherProfile(userDIV) {
-    const query = 
-    `select profileImage,nickName,Date 
+    const query =
+        `select profileImage,nickName,Date 
     from userProfile
         join user u 
             on userProfile.userID = u.userID
@@ -28,8 +28,8 @@ function anotherProfile(userDIV) {
 
 function anotherUploadProject(userDIV) {
     const query =
-    `select 
-    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+        `select 
+    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate,uP.userID
     from project p
         join category c
             on p.cateIndex = c.cateIndex
@@ -44,7 +44,7 @@ function anotherUploadProject(userDIV) {
 
 function anotherBuyProject(userDIV) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate,uP.userID
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex

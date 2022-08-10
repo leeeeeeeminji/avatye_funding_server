@@ -7,8 +7,8 @@ const trans = cons.tran;
 
 // 상품 상세 페이지
 function datailProject(proIndex) {
-    const query = 
-    `select project.projectIndex,cateIndex,project.userID,longTitle,summary,profileIMG,goalprice,beginDate,endDate,nowAmount, cateIndex, longTitle, shortTitle, summary, profileIMG, goalprice, beginDate, endDate, nowAmount, sponsor, heart, share, contents, video, webAddress, searchTag, giftIndex, gitfTitle, giftDetail, giftPrice, giftCount, giftStock, profileImage, nickName, Comment, Private, basicAddress, phone
+    const query =
+        `select project.projectIndex,cateIndex,project.userID,longTitle,summary,profileIMG,goalPrice,beginDate,endDate,nowPrice, cateIndex, longTitle, shortTitle, summary, profileIMG, goalprice, beginDate, endDate, nowAmount, sponsor, heart, share, contents, video, webAddress, searchTag, giftIndex, gitfTitle, giftDetail, giftPrice, giftCount, giftStock, profileImage, nickName, Comment, Private, basicAddress, phone
     from project
         left join projectGift pG
             on project.projectIndex = pG.projectIndex
