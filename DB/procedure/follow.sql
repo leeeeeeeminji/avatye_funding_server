@@ -21,5 +21,3 @@ begin
     end if;
 end $$
 DELIMITER;
-
-call follow('3','3');
