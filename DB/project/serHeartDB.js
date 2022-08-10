@@ -16,7 +16,7 @@ function heart(userID,proIndex) {
 // 찜 목록
 function heartList(userID) {
     const query = 
-    `select profileIMG,c.name,uP.nickName,longTitle,summary,goalprice,nowAmount,endDate from heart h
+    `select profileIMG,c.name,uP.nickName,longTitle,summary,goalPrice,nowPrice,endDate from heart h
         join project p
             on h.projectIndex = p.projectIndex
         join userProfile uP

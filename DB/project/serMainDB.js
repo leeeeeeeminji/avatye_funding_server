@@ -10,7 +10,7 @@ const trans = cons.tran;
 function mdProject(){
     const query = 
     `select 
-    projectIndex,longTitle,profileImage,goalprice,nowAmount,nickName,c.name 
+    projectIndex,LongTitle,profileIMG,goalPrice,nowPrice,nickName,c.name 
     from project
         join userProfile uP 
             on project.userID = uP.userID
@@ -26,9 +26,8 @@ function mdProject(){
 // 일단 판매율 가장 높은 프로젝트 표시
 function bestProject() {
     const query = 
-    `select
-    (goalprice/nowAmount) as percent,projectIndex, longTitle,
-    profileIMG, goalprice,endDate,nickName,c.name
+    `select (p.goalPrice/p.nowPrice * 100) as percent,projectIndex, LongTitle,
+    profileIMG, goalPrice,endDate,nickName,c.name, DATE_ADD(NOW(), INTERVAL 9 HOUR) as now
     from project p
         join category c
             on p.cateIndex = c.cateIndex

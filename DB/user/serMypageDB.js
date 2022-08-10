@@ -28,7 +28,7 @@ function myProfile(userDIV) {
 function myUploadProject(userID) {
     const query =
         `
-    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate
     from project p
         join category c
             on p.cateIndex = c.cateIndex
@@ -49,7 +49,7 @@ function myUploadCount(userID) {
 
 function myBuyProject(userDIV) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex

@@ -29,7 +29,7 @@ function anotherProfile(userDIV) {
 function anotherUploadProject(userDIV) {
     const query =
     `select 
-    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate
     from project p
         join category c
             on p.cateIndex = c.cateIndex

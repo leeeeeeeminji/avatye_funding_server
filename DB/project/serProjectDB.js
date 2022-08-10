@@ -12,44 +12,33 @@ function readProject() {
     return conpro(query);
 }
 
-// proID에 해당하는 프로젝트 상세 불러오기
-function findProject(req) {
-    const proIndex = req.params.id;
-    const query = `select * from project where proIndex = ${proIndex}`
-
-    return conpro(query);
-}
-
 // 프로젝트 등록하기
 function createProject(req) {   
     const {cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock}= req.body;
 
-    const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
+    const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalPrice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
     const insertQuery2 = `insert into projectGift (giftTitle, giftDetail, giftPrice, giftCount, giftStock) values ('${giftTitle}', '${giftDetail}', '${giftPrice}', '${giftCount}', '${giftStock}')`;
 
     return trans(insertQuery1, insertQuery2);
 }
 
-// 카테고리에 해당하는 프로젝트 불러오기
-function readProjectByCate(req) {
-    const category = req.params.category;
+// 인기 프로젝트 순서로 불러오기
+function bestProjectList() {
     const query = 
-    `select 
-    projectIndex, p.cateIndex, c.name, uP.nickName, longTitle, summary, 
-    profileIMG, endDate, nowAmount, ((nowAmount / goalprice) * 100) as percent 
-    from project p 
-        join category c 
-            on p.cateIndex = c.cateIndex 
-        join userProfile uP 
-            on p.userID = uP.userID 
-    where c.name = ${category}`
-
+    `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,
+    profileIMG, goalPrice,nowPrice,endDate,nickName,c.name
+    from project p
+        join category c
+            on p.cateIndex = c.cateIndex
+        join userProfile uP
+            on p.userID = uP.userID
+    where (p.nowPrice/p.goalPrice * 100) >= 100 and endDate > DATE_ADD(NOW(), INTERVAL 9 HOUR)
+    order by percent desc;`
     return conpro(query);
 }
 
 module.exports = {
     readProject,
     createProject,
-    findProject,
-    readProjectByCate,
+    bestProjectList
 } 
