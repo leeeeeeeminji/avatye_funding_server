@@ -7,27 +7,28 @@ const trans = cons.tran;
 
 // 메인 화면 주목할만한 프로젝트
 // 일단 목표 금액이 가장 높은 프로젝트 표시
-function mdProject(){
-    const query = 
-    `select 
-    projectIndex,LongTitle,profileIMG,goalPrice,nowPrice,nickName,c.name 
+function mdProject() {
+    const query =
+        `select 
+    projectIndex,LongTitle,profileIMG,goalPrice,nowPrice,nickName,c.name,uP.userID
     from project
         join userProfile uP 
             on project.userID = uP.userID
         join category c 
             on project.cateIndex = c.cateIndex
+    where endDate > now()
     order by goalprice desc
     limit 8;`
 
     return conpro(query);
 }
 
-// 메인 화면 주목할만한 프로젝트
+// 메인 화면 인기 프로젝트
 // 일단 판매율 가장 높은 프로젝트 표시
 function bestProject() {
-    const query = 
-    `select (p.goalPrice/p.nowPrice * 100) as percent,projectIndex, LongTitle,
-    profileIMG, goalPrice,endDate,nickName,c.name, DATE_ADD(NOW(), INTERVAL 9 HOUR) as now
+    const query =
+        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,
+    profileIMG, goalPrice,endDate,nickName,c.name,uP.userID, DATE_ADD(NOW(), INTERVAL 9 HOUR) as now
     from project p
         join category c
             on p.cateIndex = c.cateIndex

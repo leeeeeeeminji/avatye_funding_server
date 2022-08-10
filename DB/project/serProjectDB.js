@@ -13,8 +13,8 @@ function readProject() {
 }
 
 // 프로젝트 등록하기
-function createProject(req) {   
-    const {cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock}= req.body;
+function createProject(req) {
+    const { cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock } = req.body;
 
     const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalPrice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
     const insertQuery2 = `insert into projectGift (giftTitle, giftDetail, giftPrice, giftCount, giftStock) values ('${giftTitle}', '${giftDetail}', '${giftPrice}', '${giftCount}', '${giftStock}')`;
@@ -24,9 +24,9 @@ function createProject(req) {
 
 // 인기 프로젝트 순서로 불러오기
 function bestProjectList() {
-    const query = 
-    `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
-    profileIMG, goalPrice,nowPrice,endDate,nickName,c.name
+    const query =
+        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
+    profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
     from project p
         join category c
             on p.cateIndex = c.cateIndex

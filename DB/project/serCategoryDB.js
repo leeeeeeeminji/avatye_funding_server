@@ -7,8 +7,8 @@ const trans = cons.tran;
 
 // 전체 카테고리 불러오기
 function readCategory(req) {
-    const query = 
-    `select name,group_concat(detailName) as catename from category group by name;`
+    const query =
+        `select name,group_concat(detailName) as catename from category group by name;`
 
     return conpro(query);
 }
