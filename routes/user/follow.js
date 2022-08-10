@@ -54,4 +54,19 @@ router.get('/following', wrapper(async function (req,res) {
     }
 }))
 
+// 내 팔로워 목록
+router.get('/anotherfollower/:id', wrapper(async function (req,res) {
+        userDIV = req.params.id;
+        let f = await db.followerList(userDIV);
+        return res.send(f[0]);
+}))
+
+// 내가 팔로우 한 사람 목록
+router.get('/anotherfollowing/:id', wrapper(async function (req,res) {
+        userDIV = req.params.id;
+        let f = await db.followerList(userDIV);
+        return res.send(f[0]);
+
+}))
+
 module.exports = router;
