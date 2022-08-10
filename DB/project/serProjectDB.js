@@ -25,7 +25,7 @@ function createProject(req) {
 // 인기 프로젝트 순서로 불러오기
 function bestProjectList() {
     const query = 
-    `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,
+    `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
     profileIMG, goalPrice,nowPrice,endDate,nickName,c.name
     from project p
         join category c

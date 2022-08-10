@@ -21,7 +21,7 @@ router.post('/createProject', function(req, res) {
 });
 
 // 인기 상품 불러오기
-router.post('/bestprojectList',wrapper(async  function(req, res) {
+router.get('/bestprojectlist',wrapper(async  function(req, res) {
 
     let f = await db.bestProjectList(req);
     res.send(f);
