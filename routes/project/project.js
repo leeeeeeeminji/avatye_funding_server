@@ -44,5 +44,12 @@ router.get('/deadlineprojectlist',wrapper(async  function(req, res) {
 
 }));
 
+// 공개 예정 상품 불러오기
+router.get('/tobeprojectlist',wrapper(async  function(req, res) {
+
+    let f = await db.tobeprojectlist(req);
+    res.send(f);
+
+}));
 
 module.exports = router;
