@@ -37,8 +37,25 @@ function bestProjectList() {
     return conpro(query);
 }
 
+// 신규 프로젝트
+// 시작 날짜가 1주일 이내인 상품 노출
+function newprojectlist() {
+    const query =
+        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
+        profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
+        from project p
+            join category c
+                on p.cateIndex = c.cateIndex
+            join userProfile uP
+                on p.userID = uP.userID
+        where p.beginDate > DATE_ADD((DATE_SUB(NOW(), INTERVAL 7 DAY)),INTERVAL 9 HOUR)
+        order by percent desc;`
+    return conpro(query);
+}
+
 module.exports = {
     readProject,
     createProject,
-    bestProjectList
+    bestProjectList,
+    newprojectlist
 } 
