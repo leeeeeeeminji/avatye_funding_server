@@ -28,5 +28,13 @@ router.get('/bestprojectlist',wrapper(async  function(req, res) {
 
 }));
 
+// 인기 상품 불러오기
+router.get('/newprojectlist',wrapper(async  function(req, res) {
+
+    let f = await db.newprojectlist(req);
+    res.send(f);
+
+}));
+
 
 module.exports = router;
