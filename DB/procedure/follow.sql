@@ -10,14 +10,14 @@ begin
     if(follownum) = 1 then
             if(followCheck) = 1 then
                 update follow set followingCheck = 0 where following = user and followed = followeduser;
-                select 'delete' as result;
+                select 0 as result;
             else
                 update follow set followingCheck = 1 where following = user and followed = followeduser;
-                select 'insert' as result;
+                select 1 as result;
             end if;
     else
         insert into follow(following, followed) values (user,followeduser);
-        select 'insert' as result;
+        select 1 as result;
     end if;
 end $$
 DELIMITER;
