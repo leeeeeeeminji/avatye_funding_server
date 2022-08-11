@@ -10,14 +10,14 @@ begin
         if(heartnum) = 1 then
                 if(heartCheckk) = 1 then
                     update heart set heartCheck = 0 where userId = user and projectIndex = project;
-                    select 'delete' as result;
+                    select 0 as result;
                 else
                     update heart set heartCheck = 1 where userId = user and projectIndex = project;
-                    select 'insert' as result;
+                    select 1 as result;
                 end if;
         else
             insert into heart(userID, projectIndex) values (user,project);
-            select 'insert' as result;
+            select 1 as result;
         end if;
 end $$
 DELIMITER;

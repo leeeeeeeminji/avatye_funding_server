@@ -74,8 +74,8 @@ function deadlineprojectlist() {
 // 공개 예정 프로젝트
 function tobeprojectlist() {
     const query =
-        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
-        profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
+        `select projectIndex, LongTitle,summary,
+        profileIMG, nickName,c.name,uP.userID
         from project p
             join category c
                 on p.cateIndex = c.cateIndex
