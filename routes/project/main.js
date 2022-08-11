@@ -1,3 +1,4 @@
+const { query } = require('express');
 var express = require('express');
 var router = express.Router();
 const db = require('../../DB/project/serMainDB');
@@ -9,12 +10,13 @@ const wrapper = wrap.wrapper;
 
 // 메인 화면 주목할만한 프로젝트
 router.get('/pointproject', wrapper(async function(req, res) {
-    wrapper( async function query(){
-        let f = await db.mdProject();
-        return res.send(f);
+
+    let f = await db.mdProject();
+    let query = wrapper(async function(result){
+        return res.send(result);
     });
   
-    middle.heartToken(req,res,query);
+    await middle.heartToken(req,res,query(f));
 
 }));
 

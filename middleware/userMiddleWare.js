@@ -27,7 +27,7 @@ const heartToken = wrapper(async function(req,res,query){
     const toke = req.get('user_token');
     if(toke !== undefined){
     // 토큰 가져온 후 검증 - 에러 코드 or 유저 판별 DIV 반환
-    const msg = await middle.verifyToken(toke);
+    const msg = await verifyToken(toke);
     // 에러 발생 시 res로 에러 반환
     if (msg.code) {
         console.log(msg.code + " : " + msg.massage);
