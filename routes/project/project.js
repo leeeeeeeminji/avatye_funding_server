@@ -28,10 +28,18 @@ router.get('/bestprojectlist',wrapper(async  function(req, res) {
 
 }));
 
-// 인기 상품 불러오기
+// 신규 상품 불러오기
 router.get('/newprojectlist',wrapper(async  function(req, res) {
 
     let f = await db.newprojectlist(req);
+    res.send(f);
+
+}));
+
+// 마감 임박 상품 불러오기
+router.get('/deadlineprojectlist',wrapper(async  function(req, res) {
+
+    let f = await db.deadlineprojectlist(req);
     res.send(f);
 
 }));

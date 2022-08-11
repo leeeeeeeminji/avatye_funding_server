@@ -49,7 +49,24 @@ function newprojectlist() {
             join userProfile uP
                 on p.userID = uP.userID
         where p.beginDate > DATE_ADD((DATE_SUB(NOW(), INTERVAL 7 DAY)),INTERVAL 9 HOUR)
-        order by percent desc;`
+        order by beginDate;`
+    return conpro(query);
+}
+
+// 마감 임박 프로젝트
+// 마감 날짜가 1주일 이내인 상품 노출
+function deadlineprojectlist() {
+    const query =
+        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
+        profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
+        from project p
+            join category c
+                on p.cateIndex = c.cateIndex
+            join userProfile uP
+                on p.userID = uP.userID
+        where date_sub(p.endDate,INTERVAL 7 DAY) < DATE_ADD(NOW(),INTERVAL 9 HOUR)
+        and p.endDate > DATE_ADD(NOW(),INTERVAL 9 HOUR)
+        order by endDate;`
     return conpro(query);
 }
 
@@ -57,5 +74,6 @@ module.exports = {
     readProject,
     createProject,
     bestProjectList,
-    newprojectlist
+    newprojectlist,
+    deadlineprojectlist
 } 
