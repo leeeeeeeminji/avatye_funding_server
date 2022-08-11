@@ -49,6 +49,7 @@ function newprojectlist() {
             join userProfile uP
                 on p.userID = uP.userID
         where p.beginDate > DATE_ADD((DATE_SUB(NOW(), INTERVAL 7 DAY)),INTERVAL 9 HOUR)
+        and p.beginDate < DATE_ADD(NOW(),INTERVAL 9 HOUR)
         order by beginDate;`
     return conpro(query);
 }
@@ -70,10 +71,26 @@ function deadlineprojectlist() {
     return conpro(query);
 }
 
+// 공개 예정 프로젝트
+function tobeprojectlist() {
+    const query =
+        `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
+        profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
+        from project p
+            join category c
+                on p.cateIndex = c.cateIndex
+            join userProfile uP
+                on p.userID = uP.userID
+        where beginDate > DATE_ADD(NOW(),INTERVAL 9 HOUR)
+        order by beginDate;`
+    return conpro(query);
+}
+
 module.exports = {
     readProject,
     createProject,
     bestProjectList,
     newprojectlist,
-    deadlineprojectlist
+    deadlineprojectlist,
+    tobeprojectlist
 } 
