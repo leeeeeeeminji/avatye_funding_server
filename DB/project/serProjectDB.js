@@ -55,7 +55,7 @@ function newprojectlist() {
 
 // 마감 임박 프로젝트
 // 마감 날짜가 1주일 이내인 상품 노출
-function newprojectlist() {
+function deadlineprojectlist() {
     const query =
         `select (p.nowPrice/p.goalPrice * 100) as percent,projectIndex, LongTitle,summary,
         profileIMG, goalPrice,nowPrice,endDate,nickName,c.name,uP.userID
@@ -74,5 +74,6 @@ module.exports = {
     readProject,
     createProject,
     bestProjectList,
-    newprojectlist
+    newprojectlist,
+    deadlineprojectlist
 } 

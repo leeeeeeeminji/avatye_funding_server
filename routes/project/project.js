@@ -36,5 +36,13 @@ router.get('/newprojectlist',wrapper(async  function(req, res) {
 
 }));
 
+// 마감 임박 상품 불러오기
+router.get('/deadlineprojectlist',wrapper(async  function(req, res) {
+
+    let f = await db.deadlineprojectlist(req);
+    res.send(f);
+
+}));
+
 
 module.exports = router;
