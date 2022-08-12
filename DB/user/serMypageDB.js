@@ -17,8 +17,10 @@ function myPageComment(userDIV) {
 }
 
 function myProfile(userDIV) {
-    const query = `select profileImage,nickName,Date from userProfile
-    join user u on userProfile.userID = u.userID
+    const query =
+        `select profileImage,nickName,Date from userProfile
+        join user u 
+            on userProfile.userID = u.userID
     where u.userID = "${userDIV}";`
     return conpro(query);
 }
@@ -26,41 +28,58 @@ function myProfile(userDIV) {
 function myUploadProject(userID) {
     const query =
         `
-    select  projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
-    from project p
-        join category c
-            on p.cateIndex = c.cateIndex
-        join user u
-            on u.userID = p.userID
-        join userProfile uP
-            on u.userID = uP.userID
-    where u.userID = "${userID}";
+        select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
+        from project p
+        left join (select projectIndex,heartCheck from heart where userID = '${userID}') as hc
+                    on hc.projectIndex = p.projectIndex
+            join category c
+                on p.cateIndex = c.cateIndex
+            join user u
+                on u.userID = p.userID
+            join userProfile uP
+                on u.userID = uP.userID
+        where u.userID = '${userID}';
     `
     return conpro(query);
 }
 
-function myBuyProject(userDIV) {
+function myUploadCount(userID) {
+    const query =
+        `select count(*) as count from project where userID = '${userID}';`
+    return conpro(query);
+}
+
+function myBuyProject(userID) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalprice,nowAmount,endDate
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex
+        left join (select projectIndex,heartCheck from heart where userID = '${userID}') as hc
+            on hc.projectIndex = p.projectIndex
         join category c
             on p.cateIndex = c.cateIndex
         join user u
             on o.userID = u.userID
         join userProfile uP
-            on u.userID = uP.userID
-    where o.userID = "${userDIV}";`
+            on p.userID = uP.userID
+    where o.userID = '${userID}'
+    group by o.projectIndex
+    order by endDate desc;`
     return conpro(query);
 }
 
-
-
+function myBuyCount(userID) {
+    const query =
+        `Select count(*) as count from (select count(*) as count from \`order\` where userID = '${userID}' group by projectIndex) as total;`
+    return conpro(query);
+}
 
 module.exports = {
     myPageComment,
     myUploadProject,
     myBuyProject,
-    myProfile
+    myProfile,
+    myUploadCount,
+    myBuyCount
 }

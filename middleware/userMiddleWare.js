@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const wrap = require('../util/wrapper');
+const wrapper = wrap.wrapper;
 const secret = 'hwan'
 
 // 토큰 검증
@@ -21,5 +23,5 @@ async function verifyToken(token){
 }
 
 module.exports = {
-    verifyToken
+    verifyToken,
 }
