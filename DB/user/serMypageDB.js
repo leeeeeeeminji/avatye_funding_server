@@ -30,7 +30,7 @@ function myUploadProject(userID) {
         `
         select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
         from project p
-        left join (select projectIndex,heartCheck from heart where userID = '${userDIV}') as hc
+        left join (select projectIndex,heartCheck from heart where userID = '${userID}') as hc
                     on hc.projectIndex = p.projectIndex
             join category c
                 on p.cateIndex = c.cateIndex
