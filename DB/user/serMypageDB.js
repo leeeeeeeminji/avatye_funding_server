@@ -28,15 +28,17 @@ function myProfile(userDIV) {
 function myUploadProject(userID) {
     const query =
         `
-    select  projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate
-    from project p
-        join category c
-            on p.cateIndex = c.cateIndex
-        join user u
-            on u.userID = p.userID
-        join userProfile uP
-            on u.userID = uP.userID
-    where u.userID = "${userID}";
+        select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
+        from project p
+        left join (select projectIndex,heartCheck from heart where userID = '${userDIV}') as hc
+                    on hc.projectIndex = p.projectIndex
+            join category c
+                on p.cateIndex = c.cateIndex
+            join user u
+                on u.userID = p.userID
+            join userProfile uP
+                on u.userID = uP.userID
+        where u.userID = '${userID}';
     `
     return conpro(query);
 }
@@ -49,17 +51,19 @@ function myUploadCount(userID) {
 
 function myBuyProject(userDIV) {
     const query = `
-    select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate
+    select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
     from \`order\` o
         join project p
             on o.projectIndex = p.projectIndex
+        left join (select projectIndex,heartCheck from heart where userID = '${userID}') as hc
+            on hc.projectIndex = p.projectIndex
         join category c
             on p.cateIndex = c.cateIndex
         join user u
             on o.userID = u.userID
         join userProfile uP
             on p.userID = uP.userID
-    where o.userID = "${userDIV}"
+    where o.userID = '${userID}'
     group by o.projectIndex
     order by endDate desc;`
     return conpro(query);
