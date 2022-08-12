@@ -42,12 +42,16 @@ router.get('/', wrapper(async function (req, res, next) {
 }));
 
 // 프로젝트 만들기
-router.post('/createProject', function (req, res) {
+router.post('/createProject', wrapper (async function (req, res) {
+    const rb = req.body;  
 
-    let f = db.createProject(req);
+    let f = await db.createProject(rb);
     res.send(f);
 
-});
+    // let f = db.createProject(req);
+    // res.send(f);
+
+}));
 
 // 인기 상품 불러오기
 router.get('/bestprojectlist', wrapper(async function (req, res) {
