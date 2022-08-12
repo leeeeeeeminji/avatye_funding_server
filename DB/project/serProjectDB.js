@@ -22,13 +22,23 @@ function readProject(userDIV) {
 }
 
 // 프로젝트 등록하기
-function createProject(req) {
-    const { cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock } = req.body;
-
-    const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalPrice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
-    const insertQuery2 = `insert into projectGift (giftTitle, giftDetail, giftPrice, giftCount, giftStock) values ('${giftTitle}', '${giftDetail}', '${giftPrice}', '${giftCount}', '${giftStock}')`;
+function createProject(rb) {
+    const {category, detailcategory, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalprice, beginDate, endDate, contents, giftTitle, giftDetail, giftPrice, giftCount, giftStock } = rb;
+    const cateIndex = findCateIndex(category, detailcategory);
+    const insertQuery1 = `insert into project (cateIndex, longTitle, shortTitle, summary, profileIMG, goalPrice, beginDate, endDate)
+                            values (${cateIndex}, ${longTitle}, ${shortTitle}, ${summary}, ${profileIMG})`
+    // const insertQuery1 = `insert into project (cateIndex, userID, longTitle, shortTitle, summary, profileIMG, video, webAddress, searchTag, goalPrice, beginDate, endDate, contents) values (${cateIndex}, '${userID}', '${longTitle}', '${shortTitle}', '${summary}', '${profileIMG}', '${video}', '${webAddress}', '${searchTag}', ${goalprice}, '${beginDate}', '${endDate}', '${contents}')`;
+    // const insertQuery2 = `insert into projectGift (giftTitle, giftDetail, giftPrice, giftCount, giftStock) values ('${giftTitle}', '${giftDetail}', '${giftPrice}', '${giftCount}', '${giftStock}')`;
 
     return trans(insertQuery1, insertQuery2);
+}
+
+// cateIndex 찾기
+function findCateIndex(category, detailcategory) {
+
+    const query = `select cateIndex from category where name = '${category}' and detailName = '${detailcategory}';`
+
+    return conpro(query);
 }
 
 // 인기 프로젝트 순서로 불러오기
