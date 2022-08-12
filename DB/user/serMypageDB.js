@@ -49,7 +49,7 @@ function myUploadCount(userID) {
     return conpro(query);
 }
 
-function myBuyProject(userDIV) {
+function myBuyProject(userID) {
     const query = `
     select  p.projectIndex,profileIMG,c.name,uP.nickName,uP.userID,p.LongTitle,summary,goalPrice,nowPrice,endDate,hc.heartCheck
     from \`order\` o
