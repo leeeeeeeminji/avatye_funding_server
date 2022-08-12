@@ -29,8 +29,10 @@ function anotherProfile(userDIV) {
 function anotherUploadProject(userDIV) {
     const query =
         `select 
-    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate,uP.userID
+    projectIndex,profileIMG,c.name,uP.nickName,p.LongTitle,summary,goalPrice,nowPrice,endDate,uP.userID,
     from project p
+    left join (select projectIndex,heartCheck from heart where userID = '${userDIV}') as hc
+    on hc.projectIndex = project.projectIndex
         join category c
             on p.cateIndex = c.cateIndex
         join user u
@@ -51,7 +53,7 @@ function anotherBuyProject(userDIV) {
         join category c
             on p.cateIndex = c.cateIndex
         join user u
-            on o.userID = u.userID
+            on p.userID = u.userID
         join userProfile uP
             on u.userID = uP.userID
     where o.userID = "${userDIV}"
