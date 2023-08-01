@@ -7,8 +7,8 @@
   react와 node.js를 사용하여 진행한 텀블벅 클론 코딩 팀프로젝트 입니다.
   텀블벅의 UI와 모든 기능을 동일하게 구현하였습니다. <br>
   
-  <b>텀블벅 백앤드 코드</b><br>
-  https://github.com/leeeeeeeminji/avatye_funding_cilent
+  <b>텀블벅  코드</b><br>
+  https://github.com/leeeeeeeminji/avatye_funding_client
 </p>
 <br>
 
