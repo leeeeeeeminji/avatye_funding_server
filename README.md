@@ -47,22 +47,13 @@
 
 ## 📌 프로젝트 규칙
 #### 폴더
-- components
-  - UI : 공용으로 사용하는 컴포넌트
-- pages
-  - 가장 큰 페이지
+- DB
+  DB 연결 & 쿼리 날리기
+- Routes
+  라우터 연결
+- Util
+  보조 기능 ex) 토큰 발급
 <br>
-
-#### css 규칙 <br>
-- 한 폴더에 한 개의 css.<br>
-- 이름 : xxx.module.css<br>
-- 사용할때는 import xxx from './xxx.module.css'  
-- className={xxx.yyy}
-<br>
-
-#### 화면 구성 틀
-- 기본css > max-width : 1160px  
-- margin : 0 auto
 
 #### git
 - git fetch 새로고침
